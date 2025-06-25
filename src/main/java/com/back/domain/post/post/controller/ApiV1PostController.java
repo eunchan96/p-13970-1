@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -24,7 +23,7 @@ public class ApiV1PostController {
 
         return items.stream()
                 .map(PostDto::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{id}")
