@@ -5,6 +5,7 @@ import com.back.domain.post.post.service.PostService;
 import com.back.domain.post.postComment.dto.PostCommentDto;
 import com.back.domain.post.postComment.entity.PostComment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class ApiV1PostCommentController {
     private final PostService postService;
 
     @GetMapping
+    @Transactional(readOnly = true)
     public List<PostCommentDto> getItems(@PathVariable int postId) {
         Post post = postService.findById(postId).get();
 
@@ -25,6 +27,7 @@ public class ApiV1PostCommentController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public PostCommentDto getItem(@PathVariable int postId, @PathVariable int id) {
         Post post = postService.findById(postId).get();
         PostComment postComment = post.findCommentById(id).get();
@@ -32,6 +35,7 @@ public class ApiV1PostCommentController {
     }
 
     @GetMapping("/{id}/delete")
+    @Transactional
     public String delete(@PathVariable int postId, @PathVariable int id) {
         Post post = postService.findById(postId).get();
         PostComment postComment = post.findCommentById(id).get();
