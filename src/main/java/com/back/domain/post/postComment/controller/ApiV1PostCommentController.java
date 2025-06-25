@@ -46,6 +46,10 @@ public class ApiV1PostCommentController {
 
         postService.deleteComment(post, postComment);
 
-        return new RsData("200-1", "%d번 댓글이 삭제되었습니다.".formatted(id));
+        return new RsData(
+                "200-1",
+                "%d번 댓글이 삭제되었습니다.".formatted(id),
+                new PostCommentDto(postComment)
+        );
     }
 }
