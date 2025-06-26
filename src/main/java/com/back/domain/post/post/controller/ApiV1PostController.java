@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,16 +67,19 @@ public class ApiV1PostController {
 
     @PostMapping
     @Transactional
-    public RsData<PostWriteResBody> write(@Valid @RequestBody PostWriteReqBody form) {
+    public ResponseEntity<RsData<PostWriteResBody>> write(@Valid @RequestBody PostWriteReqBody form) {
         Post post = postService.write(form.title, form.content);
 
-        return new RsData<>(
-                "200-1",
-                "%d번 글이 작성되었습니다.".formatted(post.getId()),
-                new PostWriteResBody(
-                        postService.count(),
-                        new PostDto(post)
-                )
+        return new ResponseEntity<>(
+                new RsData<>(
+                        "201-1",
+                        "글이 작성되었습니다.",
+                        new PostWriteResBody(
+                                postService.count(),
+                                new PostDto(post)
+                        )
+                ),
+                org.springframework.http.HttpStatus.CREATED
         );
     }
 }
