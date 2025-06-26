@@ -54,6 +54,29 @@ public class ApiV1PostCommentController {
     }
 
 
+    record PostCommentWriteReqBody(
+            @NotBlank
+            @Size(min = 2, max = 5000)
+            String content
+    ) {}
+
+    @PostMapping
+    @Transactional
+    public RsData<PostCommentDto> write(
+            @PathVariable int postId,
+            @RequestBody @Valid PostCommentWriteReqBody reqBody
+    ) {
+        Post post = postService.findById(postId).get();
+        PostComment postComment = postService.writeComment(post, reqBody.content());
+
+        return new RsData<>(
+                "200-1",
+                "%d번 댓글이 작성되었습니다.".formatted(postComment.getId()),
+                new PostCommentDto(postComment)
+        );
+    }
+
+
     record PostCommentModifyReqBody(
             @NotBlank
             @Size(min = 2, max = 5000)
