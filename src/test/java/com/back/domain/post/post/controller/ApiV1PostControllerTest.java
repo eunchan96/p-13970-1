@@ -161,4 +161,22 @@ public class ApiV1PostControllerTest {
                     .andExpect(jsonPath("$[%d].body".formatted(i)).value(post.getContent()));
         }
     }
+
+    @Test
+    @DisplayName("글 단건조회 - 404")
+    public void t6() throws Exception {
+        int id = Integer.MAX_VALUE;
+
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/" + id)
+                ).andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItem"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.resultCode").value("404-1"))
+                .andExpect(jsonPath("$.msg").value("해당 글이 존재하지 않습니다."));
+    }
 }
