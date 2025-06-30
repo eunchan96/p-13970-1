@@ -55,4 +55,8 @@ public class PostService {
     public Optional<Post> findLatest() {
         return postRepository.findFirstByOrderByIdDesc();
     }
+
+    public void flush() {
+        postRepository.flush();
+    }
 }

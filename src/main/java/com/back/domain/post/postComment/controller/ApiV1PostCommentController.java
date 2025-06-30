@@ -67,10 +67,12 @@ public class ApiV1PostCommentController {
             @RequestBody @Valid PostCommentWriteReqBody reqBody
     ) {
         Post post = postService.findById(postId).get();
-        PostComment postComment = postService.writeComment(post, reqBody.content());
+        PostComment postComment = postService.writeComment(post, reqBody.content);
+
+        postService.flush();
 
         return new RsData<>(
-                "200-1",
+                "201-1",
                 "%d번 댓글이 작성되었습니다.".formatted(postComment.getId()),
                 new PostCommentDto(postComment)
         );
@@ -93,12 +95,11 @@ public class ApiV1PostCommentController {
         Post post = postService.findById(postId).get();
         PostComment postComment = post.findCommentById(id).get();
 
-        postService.modifyComment(postComment, reqBody.content());
+        postService.modifyComment(postComment, reqBody.content);
 
         return new RsData<>(
                 "200-1",
                 "%d번 댓글이 수정되었습니다.".formatted(id)
         );
     }
-
 }
